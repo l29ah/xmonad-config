@@ -1,0 +1,7 @@
+*~
+*.hi
+*.o
+/xmonad.errors
+/xmonad-*-linux
+PerWindowKbdLayout.hs
+DisableAutoRepeat.hs
