@@ -21,7 +21,7 @@ module XMonad.Hooks.PerWindowKbdLayout (
                                 perWindowKbdLayout) where
 
 import Foreign
-import Foreign.C.Types (CUChar,CUShort,CUInt,CInt)
+import Foreign.C.Types
 
 import Control.Monad (when)
 import Data.List (find)
