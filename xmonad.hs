@@ -187,6 +187,7 @@ myManageHook = composeOne [
 	className =? "XData" -?> moveTo "jabber",
 	className =? "Dialog" -?> moveTo "jabber",
 	className =? "psi" -?> moveTo "jabber",
+	className =? "Psi-plus" -?> moveTo "jabber",
 	className =? "Uzbl-core" -?> moveTo "web",
 	className =? "Firefox" -?> moveTo "web",
 	className =? "Midori" -?> moveTo "web",
