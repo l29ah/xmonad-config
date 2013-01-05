@@ -32,6 +32,7 @@ import XMonad.Layout.ResizeScreen
 --import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
+import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
 import XMonad.StackSet hiding (workspaces, focus)
 import qualified XMonad.StackSet as W
@@ -78,33 +79,34 @@ myXPConfig = defaultXPConfig {
 }
 --}}}
 --{{{ Key bindings
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ [
-	((modm .|. shiftMask, xK_c     ), kill)
-	, ((modm,               xK_space ), sendMessage NextLayout)
-	, ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
-	, ((modm,               xK_n     ), refresh)
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
+	[ ((modm .|. shiftMask,		xK_c),		kill)
+	, ((modm,			xK_space),	sendMessage NextLayout)
+	, ((modm .|. shiftMask,		xK_space),	setLayout $ XMonad.layoutHook conf)
+	, ((modm,			xK_n),		refresh)
 	--, ((modm,               xK_j     ), windows focusDown)
 	--, ((modm,               xK_k     ), windows focusUp  )
-	, ((modm,               xK_m     ), windows focusMaster  )
-	, ((modm,               xK_Return), windows swapMaster)
+	, ((modm,			xK_m),		windows focusMaster)
+	, ((modm,			xK_Return),	windows swapMaster)
 	--, ((modm .|. shiftMask, xK_j     ), windows swapDown  )
 	--, ((modm .|. shiftMask, xK_k     ), windows swapUp    )
-	, ((modm .|. controlMask, xK_h), sendMessage Shrink)
-	, ((modm .|. controlMask, xK_l), sendMessage Expand)
-	, ((modm,               xK_t     ), withFocused $ windows . sink)
-	, ((modm              , xK_comma ), sendMessage (IncMasterN 1))
-	, ((modm              , xK_period), sendMessage (IncMasterN (-1)))
-	, ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
-	, ((modm, xK_u), focusUrgent)
-	, ((modm              , xK_g     ), windowPromptGoto myXPConfig)
-	, ((modm,               xK_l), sendMessage $ Go R)
-	, ((modm,               xK_h), sendMessage $ Go L)
-	, ((modm,               xK_k), sendMessage $ Go U)
-	, ((modm,               xK_j), sendMessage $ Go D)
-	, ((modm .|. shiftMask, xK_l), sendMessage $ Swap R)
-	, ((modm .|. shiftMask, xK_h), sendMessage $ Swap L)
-	, ((modm .|. shiftMask, xK_k), sendMessage $ Swap U)
-	, ((modm .|. shiftMask, xK_j), sendMessage $ Swap D)
+	, ((modm .|. controlMask,	xK_h),		sendMessage Shrink)
+	, ((modm .|. controlMask,	xK_l),		sendMessage Expand)
+	, ((modm,			xK_t),		withFocused $ windows . sink)
+	, ((modm,			xK_comma),	sendMessage (IncMasterN 1))
+	, ((modm,			xK_period),	sendMessage (IncMasterN (-1)))
+	, ((modm .|. shiftMask,		xK_q),		io (exitWith ExitSuccess))
+	, ((modm,			xK_u),		focusUrgent)
+	, ((modm,			xK_g),		windowPromptGoto myXPConfig)
+	, ((modm,			xK_l),		sendMessage $ Go R)
+	, ((modm,			xK_h),		sendMessage $ Go L)
+	, ((modm,			xK_k),		sendMessage $ Go U)
+	, ((modm,			xK_j),		sendMessage $ Go D)
+	, ((modm .|. shiftMask,		xK_l),		sendMessage $ Swap R)
+	, ((modm .|. shiftMask,		xK_h),		sendMessage $ Swap L)
+	, ((modm .|. shiftMask,		xK_k),		sendMessage $ Swap U)
+	, ((modm .|. shiftMask,		xK_j),		sendMessage $ Swap D)
+	, ((modm,			xK_p),		shellPrompt myXPConfig)
 	--, ((modm, xK_g), goToSelected defaultGSConfig)
 	] ++
 	-- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
@@ -210,6 +212,7 @@ myManageHook = composeOne [
 	className =? "Epdfview" -?> moveTo "reading",
 	className =? "MuPDF" -?> moveTo "reading",
 	className =? "llpp" -?> moveTo "reading",
+	className =? "Zathura" -?> moveTo "reading",
 	title =? "ncmpcpp" -?> moveTo "status",
 	className =? "Conky" -?> moveTo "status",
 
