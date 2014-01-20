@@ -45,6 +45,7 @@ import XMonad.Layout.VTabbed as VT
 import XMonad.Layout.MTabbed as MT
 --}}}
 
+
 instance Namer CustomNamer where
     nameIt _ w = do
                     ws <- gets windowset
@@ -56,7 +57,7 @@ instance Namer CustomNamer where
 myName = CustomNamer
 
 --{{{ Theme
-myTheme = defaultTheme { 
+myTheme = defaultTheme {
 	fontName = "xft:Terminus:size=14",
 	--fontName = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-*",
 	activeColor = "#000000",
@@ -135,23 +136,21 @@ tabJump x = withWindowSet $ (\c -> focusNth $ if c `mod` 10 == x then c + 10 els
 --{{{ Mouse bindings 
 myMouseBindings :: (XConfig Layout -> M.Map (ButtonMask, Button) (Window -> X ()))
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-    -- mod-button1, Set the window to floating mode and move by dragging
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
-                                       >> windows shiftMaster))
-    -- mod-button2, Raise the window to the top of the stack
-    , ((modm, button2), (\w -> focus w >> windows shiftMaster))
-    -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
-                                       >> windows shiftMaster))
-    ]
+	-- mod-button1, Set the window to floating mode and move by dragging
+	[ ((modm, button1), (\w -> focus w >> mouseMoveWindow w >> windows shiftMaster))
+	-- mod-button2, Raise the window to the top of the stack
+	, ((modm, button2), (\w -> focus w >> windows shiftMaster))
+	-- mod-button3, Set the window to floating mode and resize by dragging
+	, ((modm, button3), (\w -> focus w >> mouseResizeWindow w >> windows shiftMaster))
+	]
 --}}}
 --{{{ Layouts
-myLayout = layoutHintsToCenter $ cn $ smartBorders $ 
+myLayout = layoutHintsToCenter $ cn $ smartBorders $
 	--onWorkspace "web" (full ||| grid) $
 	onWorkspace "web" (full ||| vtab) $
 --	onWorkspace "jabber" (tabBar shrinkText myTheme Bottom $ withIM (10%65) (ClassName "Tkabber") full) $
-	--onWorkspace "jabber" ((im full) ||| grid) $ 
-	onWorkspace "jabber" (im htab) $ 
+	--onWorkspace "jabber" ((im full) ||| grid) $
+	onWorkspace "jabber" (im htab) $
 	onWorkspace "stuff" (grid ||| full) $
 --	onWorkspace "status" tiled $
 	onWorkspace "status" (Tall 1 (3/100) (6/10)) $
@@ -213,6 +212,7 @@ myManageHook = composeOne [
 	className =? "MuPDF" -?> moveTo "reading",
 	className =? "llpp" -?> moveTo "reading",
 	className =? "Zathura" -?> moveTo "reading",
+	className =? "Fbreader" -?> moveTo "reading",
 	title =? "ncmpcpp" -?> moveTo "status",
 	className =? "Conky" -?> moveTo "status",
 
