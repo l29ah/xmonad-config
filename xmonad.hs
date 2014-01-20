@@ -1,13 +1,22 @@
 --{{{ Imports
-{-# OPTIONS_GHC -fglasgow-exts #-} -- For deriving Data/Typeable
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, PatternGuards, NoMonomorphismRestriction #-}
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, PatternGuards, NoMonomorphismRestriction, OverloadedStrings, DeriveDataTypeable #-}
 
+import Control.Concurrent
+import Control.Concurrent.MVar
+import qualified Control.Exception as C
+import Control.Monad
 import Data.List
+import qualified Data.Map        as M
 import Data.Maybe
 import Data.Monoid
-import System.Exit
 import Data.Ratio ((%))
-import qualified Data.Map        as M
+import qualified Data.Text as T
+import System.Exit
+import System.IO
+import System.Posix.POpen
+import System.Posix.Signals
+import System.Posix.Types
+import System.Process
 --import Debug.Trace
 
 import XMonad hiding (trace)
@@ -37,6 +46,7 @@ import XMonad.Prompt.Window
 import XMonad.StackSet hiding (workspaces, focus)
 import qualified XMonad.StackSet as W
 import XMonad.Util.NamedWindows
+import qualified XMonad.Util.ExtensibleState as XS
 
 -- Local libraries
 import XMonad.Hooks.PerWindowKbdLayout
@@ -108,6 +118,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm .|. shiftMask,		xK_k),		sendMessage $ Swap U)
 	, ((modm .|. shiftMask,		xK_j),		sendMessage $ Swap D)
 	, ((modm,			xK_p),		shellPrompt myXPConfig)
+	, ((modm .|. shiftMask,		xK_f),		XS.modify (\(FuckStatus x) -> FuckStatus $ not x))
 	--, ((modm, xK_g), goToSelected defaultGSConfig)
 	] ++
 	-- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
@@ -222,29 +233,81 @@ myManageHook = composeOne [
 	where	moveTo = doF . shift
 		doSink = ask >>= \w -> liftX (reveal w) >> doF (W.sink w)
 --}}}
+--{{{ Fuck firefox
+data FuckStatus = FuckStatus Bool deriving (Typeable,Read,Show)
+
+instance ExtensionClass FuckStatus where
+	initialValue = FuckStatus True
+	extensionType = PersistentExtension
+
+myLogHook = do
+	FuckStatus s <- XS.get
+	when s $ do
+		wsname <- gets (currentTag . windowset)
+		case wsname of
+			"web" -> fuckFirefox False
+			_ -> fuckFirefox True
+
+fuckFirefox ye = liftIO $ do
+	(rc, out, _) <- readProcessWithExitCode' "pgrep" ["firefox"] []
+	mapM_ fuckIt $ lines $ out
+	where fuckIt s = signalProcess (if ye then sigSTOP else sigCONT) (CPid $ read s)
+
+readProcessWithExitCode'
+    :: FilePath                 -- ^ command to run
+    -> [String]                 -- ^ any arguments
+    -> String                   -- ^ standard input
+    -> IO (ExitCode,String,String) -- ^ exitcode, stdout, stderr
+readProcessWithExitCode' cmd args input = do
+    (Just inh, Just outh, Just errh, pid) <-
+        createProcess (proc cmd args){ std_in  = CreatePipe,
+                                       std_out = CreatePipe,
+                                       std_err = CreatePipe }
+
+    outMVar <- newEmptyMVar
+
+    -- fork off a thread to start consuming stdout
+    out  <- hGetContents outh
+    forkIO $ C.evaluate (length out) >> putMVar outMVar ()
+
+    -- fork off a thread to start consuming stderr
+    err  <- hGetContents errh
+    forkIO $ C.evaluate (length err) >> putMVar outMVar ()
+
+    -- now write and flush any input
+    when (not (null input)) $ do hPutStr inh input; hFlush inh
+    hClose inh -- done with stdin
+
+    -- wait on the output
+    takeMVar outMVar
+    takeMVar outMVar
+    hClose outh
+
+    -- wait on the process
+    ex <- C.catch (waitForProcess pid >>= return) (\e -> seq (e :: C.SomeException) $ return $ ExitSuccess)
+
+    return (ex, out, err)
+--}}}
 --{{{ Main config
-main = xmonad $ ewmh $ 
+main = xmonad $ ewmh $
 	--withUrgencyHookC NoUrgencyHook (UrgencyConfig {
 	withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "#ffff00" } (UrgencyConfig {
 		suppressWhen = Focused,
 		remindWhen = Every 10
 	}) $ 
-	defaultConfig {
---        terminal           = "evilvte",
-        focusFollowsMouse  = False,
-        borderWidth        = 1,
-        modMask            = mod4Mask,
-        workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace"],
-        normalBorderColor  = "#999999",
-        focusedBorderColor = "#FF0000",
- 
-        keys               = myKeys,
-        mouseBindings      = myMouseBindings
- 
-        , layoutHook         = myLayout
-        , manageHook         = myManageHook
-        , handleEventHook    = perWindowKbdLayout,
-{-        logHook            = myLogHook,-}
-        startupHook        = disableAutoRepeat >> setWMName "LG3D"
-    }
+	defaultConfig
+		{ focusFollowsMouse  = False
+		, borderWidth        = 1
+		, modMask            = mod4Mask
+		, workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace"]
+		, normalBorderColor  = "#999999"
+		, focusedBorderColor = "#FF0000"
+		, keys               = myKeys
+		, mouseBindings      = myMouseBindings
+		, layoutHook         = myLayout
+		, manageHook         = myManageHook
+		, handleEventHook    = perWindowKbdLayout
+		, logHook            = myLogHook
+		, startupHook        = disableAutoRepeat >> setWMName "LG3D"
+	}
 --}}}
