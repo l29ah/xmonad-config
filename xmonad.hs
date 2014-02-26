@@ -214,6 +214,7 @@ myManageHook = composeOne [
 	className =? "Bitcoin" -?> moveTo "stuff",
 	className =? "MPlayer" -?> moveTo "stuff",
 	className =? "mplayer2" -?> moveTo "stuff",
+	className =? "mpv" -?> moveTo "stuff",
 	className =? "Claws-mail" -?> moveTo "stuff",
 	className =? "Ossxmix" -?> moveTo "stuff",
 	className =? "Transmission-gtk" -?> moveTo "stuff",
