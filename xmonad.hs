@@ -123,17 +123,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	] ++
 	-- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
 	-- mod-shift-{w,e,r} %! Move client to screen 1, 2, or 3
-	{-
-	[((m .|. modMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+	[((m .|. modm,			key),		screenWorkspace sc >>= flip whenJust (windows . f))
 		| (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-		, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-	++
-	-}
+		, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]] ++
 --{{{ Workspace and tab jumping bindings
-    	[((m .|. modm, k), windows $ f i)
+	[((m .|. modm,			k),		windows $ f i)
 		| (i, k) <- zip (XMonad.workspaces conf) $ xK_grave : [xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal, xK_backslash, xK_BackSpace]
 		, (f, m) <- [(greedyView, 0), (shift, shiftMask)]] ++
-	[((modm .|. mod1Mask, k), tabJump i) | (i, k) <- zip [0..9] [xK_0 .. xK_9]]
+	[((modm .|. mod1Mask,		k),		tabJump i) | (i, k) <- zip [0..9] [xK_0 .. xK_9]]
 --}}}
 --}}}
 --{{{ Tab jumper
