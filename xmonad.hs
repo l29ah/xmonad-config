@@ -118,7 +118,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm .|. shiftMask,		xK_k),		sendMessage $ Swap U)
 	, ((modm .|. shiftMask,		xK_j),		sendMessage $ Swap D)
 	, ((modm,			xK_p),		shellPrompt myXPConfig)
-	, ((modm .|. shiftMask,		xK_f),		XS.modify (\(FuckStatus x) -> FuckStatus $ not x))
+	, ((modm .|. shiftMask,		xK_f),		XS.modify (\(FuckStatus (x, y)) -> FuckStatus (not x, y)))
 	--, ((modm, xK_g), goToSelected defaultGSConfig)
 	] ++
 	-- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
@@ -235,23 +235,34 @@ myManageHook = composeOne [
 		doSink = ask >>= \w -> liftX (reveal w) >> doF (W.sink w)
 --}}}
 --{{{ Fuck firefox
-data FuckStatus = FuckStatus Bool deriving (Typeable,Read,Show)
+data FuckStatus = FuckStatus (Bool, Bool) deriving (Typeable,Read,Show)
 
 instance ExtensionClass FuckStatus where
-	initialValue = FuckStatus True
+	initialValue = FuckStatus (True, False)
 	extensionType = PersistentExtension
 
 myLogHook = do
-	FuckStatus s <- XS.get
-	when s $ do
+	FuckStatus (enabled, onws) <- XS.get
+	when enabled $ do
 		wsname <- gets (currentTag . windowset)
+		liftIO $ putStrLn wsname
 		case wsname of
-			"web" -> fuckFirefox False
-			_ -> fuckFirefox True
+			"web" -> when (not onws) $ do
+				liftIO $ putStrLn "unfucking"
+				fuckFirefox False
+				XS.put $ FuckStatus (enabled, True)
+			"" -> return ()
+			_ -> when onws $ do
+				liftIO $ putStrLn "fucking"
+				fuckFirefox True
+				XS.put $ FuckStatus (enabled, False)
 
-fuckFirefox ye = liftIO $ do
-	(rc, out, _) <- readProcessWithExitCode' "pgrep" ["firefox"] []
-	mapM_ fuckIt $ lines $ out
+fuckFirefox ye = do
+	liftIO $ forkIO $ do
+		(rc, out, _) <- readProcessWithExitCode' "pgrep" ["firefox"] []
+		--when ye $ threadDelay 50000
+		mapM_ fuckIt $ lines $ out
+	return ()
 	where fuckIt s = signalProcess (if ye then sigSTOP else sigCONT) (CPid $ read s)
 
 readProcessWithExitCode'
