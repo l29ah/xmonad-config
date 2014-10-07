@@ -304,10 +304,13 @@ readProcessWithExitCode' cmd args input = do
 --{{{ Main config
 main = xmonad $ ewmh $
 	--withUrgencyHookC NoUrgencyHook (UrgencyConfig {
-	withUrgencyHookC BorderUrgencyHook { urgencyBorderColor = "#ffff00" } (UrgencyConfig {
-		suppressWhen = Focused,
-		remindWhen = Every 10
-	}) $ 
+	withUrgencyHookC (\w -> do
+			borderUrgencyHook "#ffff00" w
+			spawnUrgencyHook "notify-send Urgency: " w)
+		(UrgencyConfig {
+			suppressWhen = Focused,
+			remindWhen = Every 60
+		}) $ 
 	defaultConfig
 		{ focusFollowsMouse  = False
 		, borderWidth        = 1
