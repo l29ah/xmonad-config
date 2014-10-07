@@ -160,8 +160,7 @@ myLayout = layoutHintsToCenter $ cn $ smartBorders $
 	--onWorkspace "jabber" ((im full) ||| grid) $
 	onWorkspace "jabber" (im htab) $
 	onWorkspace "stuff" (grid ||| full) $
---	onWorkspace "status" tiled $
-	onWorkspace "status" (Tall 1 (3/100) (6/10)) $
+	onWorkspace "status" (Mirror $ withIM (2%100) (Title "dzencontent") (Tall 1 (1/100) (70/100)) ||| full) $
 	tiles ||| htab
 	where
 		--nodumbborders = resizeHorizontal n . resizeVertical n . resizeHorizontalRight n . resizeVerticalBottom n
@@ -205,6 +204,7 @@ myManageHook = composeOne [
 	className =? "Dwb" -?> moveTo "web",
 	className =? "Skype" -?> moveTo "stuff",
 	className =? "Googleearth-bin" -?> moveTo "stuff",
+	className =? "Marble-qt" -?> moveTo "stuff",
 	className =? "openttd" -?> moveTo "stuff",
 	className =? "Mumble" -?> moveTo "stuff",
 	title =? "rtorrent" -?> moveTo "stuff",
@@ -224,6 +224,10 @@ myManageHook = composeOne [
 	className =? "Fbreader" -?> moveTo "reading",
 	title =? "ncmpcpp" -?> moveTo "status",
 	className =? "Conky" -?> moveTo "status",
+	title =? "dzencontent" -?> moveTo "status",
+	title =? "atop" -?> moveTo "status",
+	title =? "pinger" -?> moveTo "status",
+	title =? "syslog" -?> moveTo "status",
 
 	return True -?> doSink
 	]
