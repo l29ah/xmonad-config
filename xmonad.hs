@@ -45,8 +45,9 @@ import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
 import XMonad.StackSet hiding (workspaces, focus)
 import qualified XMonad.StackSet as W
-import XMonad.Util.NamedWindows
 import qualified XMonad.Util.ExtensibleState as XS
+import XMonad.Util.NamedWindows
+import XMonad.Util.Scratchpad
 
 -- Local libraries
 import XMonad.Hooks.PerWindowKbdLayout
@@ -119,6 +120,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm .|. shiftMask,		xK_j),		sendMessage $ Swap D)
 	, ((modm,			xK_p),		shellPrompt myXPConfig)
 	, ((modm .|. shiftMask,		xK_f),		XS.modify (\(FuckStatus (x, y)) -> FuckStatus (not x, y)))
+	, ((modm,			xK_a),		scratchpadSpawnActionCustom "urxvt -name scratchpad -e ghci")
 	--, ((modm, xK_g), goToSelected defaultGSConfig)
 	] ++
 	-- mod-{w,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
