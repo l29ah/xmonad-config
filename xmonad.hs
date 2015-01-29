@@ -55,7 +55,7 @@ import XMonad.Hooks.DisableAutoRepeat
 import XMonad.Layout.VTabbed as VT
 import XMonad.Layout.MTabbed as MT
 --}}}
-
+--{{{ Namer
 
 instance Namer CustomNamer where
     nameIt _ w = do
@@ -66,7 +66,7 @@ instance Namer CustomNamer where
                     return $ num ++ (show nw)
 
 myName = CustomNamer
-
+--}}}
 --{{{ Theme
 myTheme = defaultTheme {
 	fontName = "xft:Terminus:size=14",
@@ -308,7 +308,7 @@ main = xmonad $ ewmh $
 	--withUrgencyHookC NoUrgencyHook (UrgencyConfig {
 	withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
-			spawnUrgencyHook "notify-send Urgency: " w)
+			spawnUrgencyHook "urge " w)
 		(UrgencyConfig {
 			suppressWhen = Focused,
 			remindWhen = Every 60
@@ -329,3 +329,4 @@ main = xmonad $ ewmh $
 		, startupHook        = disableAutoRepeat >> setWMName "LG3D"
 	}
 --}}}
+-- vim: foldmethod=marker
