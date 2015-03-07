@@ -326,7 +326,7 @@ main = xmonad $ ewmh $
 		, manageHook         = myManageHook
 		, handleEventHook    = perWindowKbdLayout
 		, logHook            = myLogHook
-		, startupHook        = disableAutoRepeat >> setWMName "LG3D"
+		, startupHook        = disableAutoRepeat
 	}
 --}}}
 -- vim: foldmethod=marker
