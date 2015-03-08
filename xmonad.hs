@@ -304,29 +304,28 @@ readProcessWithExitCode' cmd args input = do
     return (ex, out, err)
 --}}}
 --{{{ Main config
-main = xmonad $ ewmh $
-	--withUrgencyHookC NoUrgencyHook (UrgencyConfig {
-	withUrgencyHookC (\w -> do
+main = let conf = ewmh $ withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
 			spawnUrgencyHook "urge " w)
-		(UrgencyConfig {
-			suppressWhen = Focused,
-			remindWhen = Every 60
-		}) $ 
-	defaultConfig
-		{ focusFollowsMouse  = False
-		, borderWidth        = 1
-		, modMask            = mod4Mask
-		, workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace"]
-		, normalBorderColor  = "#999999"
-		, focusedBorderColor = "#FF0000"
-		, keys               = myKeys
-		, mouseBindings      = myMouseBindings
-		, layoutHook         = myLayout
-		, manageHook         = myManageHook
-		, handleEventHook    = perWindowKbdLayout
-		, logHook            = myLogHook
-		, startupHook        = disableAutoRepeat
-	}
+			(UrgencyConfig {
+				suppressWhen = Focused,
+				remindWhen = Every 60
+			}) $
+		defaultConfig
+			{ focusFollowsMouse  = False
+			, borderWidth        = 1
+			, modMask            = mod4Mask
+			, workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace"]
+			, normalBorderColor  = "#999999"
+			, focusedBorderColor = "#FF0000"
+			, keys               = myKeys
+			, mouseBindings      = myMouseBindings
+			, layoutHook         = myLayout
+			, manageHook         = myManageHook
+			, handleEventHook    = perWindowKbdLayout
+			, logHook            = myLogHook
+			, startupHook        = disableAutoRepeat
+		} in
+	xmonad $ conf { startupHook = startupHook conf >> setWMName "LG3D" }
 --}}}
 -- vim: foldmethod=marker
