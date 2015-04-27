@@ -37,6 +37,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
 import XMonad.Layout.ResizeScreen
+import XMonad.Layout.SimpleFloat
 --import XMonad.Layout.TabBarDecoration
 --import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
@@ -96,12 +97,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm,			xK_space),	sendMessage NextLayout)
 	, ((modm .|. shiftMask,		xK_space),	setLayout $ XMonad.layoutHook conf)
 	, ((modm,			xK_n),		refresh)
-	--, ((modm,               xK_j     ), windows focusDown)
-	--, ((modm,               xK_k     ), windows focusUp  )
 	, ((modm,			xK_m),		windows focusMaster)
 	, ((modm,			xK_Return),	windows swapMaster)
-	--, ((modm .|. shiftMask, xK_j     ), windows swapDown  )
-	--, ((modm .|. shiftMask, xK_k     ), windows swapUp    )
 	, ((modm .|. controlMask,	xK_h),		sendMessage Shrink)
 	, ((modm .|. controlMask,	xK_l),		sendMessage Expand)
 	, ((modm,			xK_t),		withFocused $ windows . sink)
@@ -110,10 +107,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm .|. shiftMask,		xK_q),		io (exitWith ExitSuccess))
 	, ((modm,			xK_u),		focusUrgent)
 	, ((modm,			xK_g),		windowPromptGoto myXPConfig)
+	-- Leave the vanilla focusing bindings to work with Full
+	, ((modm,			xK_Down),	windows focusDown)
+	, ((modm,			xK_Up),		windows focusUp)
 	, ((modm,			xK_l),		sendMessage $ Go R)
 	, ((modm,			xK_h),		sendMessage $ Go L)
 	, ((modm,			xK_k),		sendMessage $ Go U)
 	, ((modm,			xK_j),		sendMessage $ Go D)
+	, ((modm .|. shiftMask,		xK_j),		windows swapDown)
+	, ((modm .|. shiftMask,		xK_k),		windows swapUp)
 	, ((modm .|. shiftMask,		xK_l),		sendMessage $ Swap R)
 	, ((modm .|. shiftMask,		xK_h),		sendMessage $ Swap L)
 	, ((modm .|. shiftMask,		xK_k),		sendMessage $ Swap U)
@@ -160,9 +162,11 @@ myLayout = layoutHintsToCenter $ cn $ smartBorders $
 	onWorkspace "web" (full ||| vtab) $
 --	onWorkspace "jabber" (tabBar shrinkText myTheme Bottom $ withIM (10%65) (ClassName "Tkabber") full) $
 	--onWorkspace "jabber" ((im full) ||| grid) $
-	onWorkspace "jabber" (im htab) $
+	onWorkspace "jabber" (im htab ||| full) $
 	onWorkspace "stuff" (grid ||| full) $
 	onWorkspace "status" (Mirror $ withIM (2%100) (Title "dzencontent") (Tall 1 (1/100) (70/100)) ||| full) $
+	onWorkspace "backspace" full $
+	--onWorkspace "backspace" (simpleFloat ||| tiles) $
 	tiles ||| htab
 	where
 		--nodumbborders = resizeHorizontal n . resizeVertical n . resizeHorizontalRight n . resizeVerticalBottom n
