@@ -1,1 +1,1 @@
-Note: this stuff requires patched xmonad to work as planned. The current patchset is likely to be here: https://github.com/l29ah/booboo/tree/master/x11-wm/xmonad/files
+Note: this stuff requires patched xmonad and xmonad-contrib to work as planned. The patches are in patches/.
