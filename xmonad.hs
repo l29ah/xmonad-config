@@ -221,6 +221,7 @@ myManageHook = composeOne [
 	className =? "Claws-mail" -?> moveTo "stuff",
 	className =? "Ossxmix" -?> moveTo "stuff",
 	className =? "Transmission-gtk" -?> moveTo "stuff",
+	className =? "Transmission-qt" -?> moveTo "stuff",
 	className =? "Apvlv" -?> moveTo "reading",
 	className =? "XDvi" -?> moveTo "reading",
 	className =? "Epdfview" -?> moveTo "reading",
