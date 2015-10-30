@@ -56,6 +56,44 @@ import XMonad.Hooks.DisableAutoRepeat
 import XMonad.Layout.VTabbed as VT
 import XMonad.Layout.MTabbed as MT
 --}}}
+--{{{ Compton
+import DBus
+import DBus.Client
+import Data.Word
+import Graphics.X11.Xlib.Display
+
+dpyName :: Display -> String
+dpyName dpy = map replace $ displayString dpy where
+  replace ':' = '_'
+  replace '.' = '_'
+  replace c = c
+
+inversionStatus :: Display -> Window -> X Bool
+inversionStatus dpy w =
+  let mc = (methodCall "/" "com.github.chjj.compton" "win_get")
+             { methodCallDestination = Just $ busName_ $ "com.github.chjj.compton." ++ dpyName dpy
+             , methodCallBody = [toVariant (fromIntegral w :: Word32)
+                                , toVariant ("invert_color_force" :: String)
+                                ]
+             }
+  in io $ do client <- connectSession
+             status <- call_ client mc
+             disconnect client
+             return $ (/= 0) $ fromJust $ (fromVariant :: Variant -> Maybe Word16) $ head $ methodReturnBody status
+
+invert :: Display -> Window -> Bool -> X ()
+invert dpy w status =
+  let mc = (methodCall "/" "com.github.chjj.compton" "win_set")
+             { methodCallDestination = Just $ busName_ $ "com.github.chjj.compton." ++ dpyName dpy
+             , methodCallBody = [toVariant (fromIntegral w :: Word32)
+                                , toVariant ("invert_color_force" :: String)
+                                , toVariant ((if status then 1 else 0) :: Word16)
+                                ]
+             }
+  in io $ do client <- connectSession
+             callNoReply client mc
+             disconnect client
+--}}}
 --{{{ Namer
 
 instance Namer CustomNamer where
@@ -106,6 +144,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm,			xK_period),	sendMessage (IncMasterN (-1)))
 	, ((modm .|. shiftMask,		xK_q),		io (exitWith ExitSuccess))
 	, ((modm,			xK_u),		focusUrgent)
+	, ((modm,			xK_i     ),	withDisplay $ \dpy -> withFocused $ \w -> inversionStatus dpy w >>= \status -> invert dpy w $ not status)
 	, ((modm,			xK_g),		windowPromptGoto myXPConfig)
 	-- Leave the vanilla focusing bindings to work with Full
 	, ((modm,			xK_Down),	windows focusDown)
@@ -208,6 +247,7 @@ myManageHook = composeOne [
 	className =? "Dillo" -?> moveTo "web",
 	className =? "dwb" -?> moveTo "web",
 	className =? "Dwb" -?> moveTo "web",
+	className =? "qutebrowser" -?> moveTo "web",
 	className =? "Skype" -?> moveTo "stuff",
 	className =? "Googleearth-bin" -?> moveTo "stuff",
 	className =? "Marble Virtual Globe" -?> moveTo "stuff",
@@ -222,6 +262,9 @@ myManageHook = composeOne [
 	className =? "Ossxmix" -?> moveTo "stuff",
 	className =? "Transmission-gtk" -?> moveTo "stuff",
 	className =? "Transmission-qt" -?> moveTo "stuff",
+	className =? "transmission" -?> moveTo "stuff",
+	className =? "Blink" -?> moveTo "stuff",
+	className =? "Linphone" -?> moveTo "stuff",
 	className =? "Apvlv" -?> moveTo "reading",
 	className =? "XDvi" -?> moveTo "reading",
 	className =? "Epdfview" -?> moveTo "reading",
@@ -268,8 +311,8 @@ myLogHook = do
 fuckFirefox ye = do
 	liftIO $ forkIO $ do
 		(rc, out, _) <- readProcessWithExitCode' "pgrep" ["firefox"] []
-		--when ye $ threadDelay 50000
-		mapM_ fuckIt $ lines $ out
+		(rc, out2, _) <- readProcessWithExitCode' "pgrep" ["qutebrowser"] []
+		mapM_ fuckIt ((lines $ out) ++ (lines $ out2))
 	return ()
 	where fuckIt s = signalProcess (if ye then sigSTOP else sigCONT) (CPid $ read s)
 
