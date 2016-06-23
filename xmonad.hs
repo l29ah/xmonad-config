@@ -316,8 +316,9 @@ myLogHook = do
 
 fuckFirefox ye = do
 	liftIO $ forkIO $ do
-		(rc, out, _) <- readProcessWithExitCode' "pgrep" ["firefox"] []
-		(rc, out2, _) <- readProcessWithExitCode' "pgrep" ["qutebrowser"] []
+		-- grsec :/
+		(rc, out, _) <- readProcessWithExitCode' "sudo" ["pgrep", "firefox"] []
+		(rc, out2, _) <- readProcessWithExitCode' "sudo" ["pgrep", "qutebrowser"] []
 		mapM_ fuckIt ((lines $ out) ++ (lines $ out2))
 	return ()
 	where fuckIt s = signalProcess (if ye then sigSTOP else sigCONT) (CPid $ read s)
