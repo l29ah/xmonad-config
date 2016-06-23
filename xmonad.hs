@@ -109,7 +109,7 @@ myName = CustomNamer
 --}}}
 --{{{ Theme
 myTheme = defaultTheme {
-	fontName = "xft:Terminus:size=14",
+	fontName = "xft:Terminus:size=10",
 	--fontName = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-*",
 	activeColor = "#000000",
 	inactiveColor = "#1A1A1A",
