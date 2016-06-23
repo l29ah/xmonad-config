@@ -285,7 +285,7 @@ myManageHook = composeOne [
 	title =? "pinger" -?> moveTo "status",
 	title =? "syslog" -?> moveTo "status",
 
-	return True -?> namedScratchpadManageHook scratchpads
+	return True -?> namedScratchpadManageHook scratchpads >> doSink
 	]
 	--isFullscreen --> doFullFloat]
 	where	moveTo = doF . shift
