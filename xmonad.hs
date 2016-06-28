@@ -379,8 +379,8 @@ main = let conf = ewmh $ withUrgencyHookC (\w -> do
 			, manageHook         = myManageHook
 			, handleEventHook    = perWindowKbdLayout
 			, logHook            = myLogHook
-			, startupHook        = disableAutoRepeat
+			, startupHook        = disableAutoRepeat >> setWMName "LG3D"
 		} in
-	xmonad $ conf { startupHook = startupHook conf >> setWMName "LG3D" }
+	xmonad $ conf
 --}}}
 -- vim: foldmethod=marker
