@@ -177,7 +177,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 		, (f, m) <- [(W.view, 0), (W.shift, shiftMask)]] ++
 --{{{ Workspace and tab jumping bindings
 	[((m .|. modm,			k),		windows $ f i)
-		| (i, k) <- zip (XMonad.workspaces conf) $ xK_grave : [xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal, xK_backslash, xK_BackSpace]
+		| (i, k) <- zip (XMonad.workspaces conf) $ xK_grave : [xK_1 .. xK_9] ++ [xK_0, xK_minus, xK_equal, xK_backslash, xK_BackSpace] ++ [xK_F1 .. xK_F4]
 		, (f, m) <- [(greedyView, 0), (shift, shiftMask)]] ++
 	[((modm .|. mod1Mask,		k),		tabJump i) | (i, k) <- zip [0..9] [xK_0 .. xK_9]]
 --}}}
@@ -370,7 +370,7 @@ main = let conf = ewmh $ withUrgencyHookC (\w -> do
 			{ focusFollowsMouse  = False
 			, borderWidth        = 1
 			, modMask            = mod4Mask
-			, workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace"]
+			, workspaces         = ["status","root","web","jabber","user","stuff","ssh","reading","8","9","0","-","=","\\","backspace", "F1", "F2", "F3", "F4"]
 			, normalBorderColor  = "#999999"
 			, focusedBorderColor = "#FF0000"
 			, keys               = myKeys
