@@ -228,7 +228,7 @@ myLayout = layoutHintsToCenter $ cn $ smartBorders $
 		vtab = noBorders $ reflectHoriz $ vtabbed 200 myName VT.shrinkText myTheme
 		--tabbed = noBorders $ reflectHoriz $ tabBar shrinkText myTheme Bottom Full
 		full = noBorders Full
-		im = withIM (10%65) (ClassName "Tkabber" `Or` (Resource "main" `And` ClassName "psi"))
+		im = withIM (10%65) (ClassName "Tkabber" `Or` (Resource "main" `And` ClassName "psi") `Or` Role "roster")
 		--tiles = (dwmify $ tiled) ||| (dwmify $ Mirror tiled)
 		--tiles = dwmify $ tiled
 		tiles = tiled
@@ -241,6 +241,7 @@ myManageHook = composeOne [
 
 	className =? "Chat" -?> moveTo "jabber",
 	className =? "Tkabber" -?> moveTo "jabber",
+	className =? "Gajim" -?> moveTo "jabber",
 	className =? "Message" -?> moveTo "jabber",
 	className =? "ErrorDialog" -?> moveTo "jabber",
 	className =? "XData" -?> moveTo "jabber",
