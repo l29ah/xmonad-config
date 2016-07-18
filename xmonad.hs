@@ -303,15 +303,12 @@ myLogHook = do
 	FuckStatus (enabled, onws) <- XS.get
 	when enabled $ do
 		wsname <- gets (currentTag . windowset)
-		liftIO $ putStrLn wsname
 		case wsname of
 			"web" -> when (not onws) $ do
-				liftIO $ putStrLn "unfucking"
 				fuckFirefox False
 				XS.put $ FuckStatus (enabled, True)
 			"" -> return ()
 			_ -> when onws $ do
-				liftIO $ putStrLn "fucking"
 				fuckFirefox True
 				XS.put $ FuckStatus (enabled, False)
 
