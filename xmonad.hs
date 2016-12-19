@@ -52,10 +52,11 @@ import XMonad.Util.NamedWindows
 import XMonad.Util.Scratchpad
 
 -- Local libraries
-import XMonad.Hooks.PerWindowKbdLayout
 import XMonad.Hooks.DisableAutoRepeat
-import XMonad.Layout.VTabbed as VT
+import XMonad.Hooks.IgnoreNetActiveWindow
+import XMonad.Hooks.PerWindowKbdLayout
 import XMonad.Layout.MTabbed as MT
+import XMonad.Layout.VTabbed as VT
 --}}}
 --{{{ Compton
 import DBus
@@ -357,7 +358,7 @@ readProcessWithExitCode' cmd args input = do
     return (ex, out, err)
 --}}}
 --{{{ Main config
-main = let conf = ewmh $ withUrgencyHookC (\w -> do
+main = let conf = ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
 			spawnUrgencyHook "urge " w)
 			(UrgencyConfig {
