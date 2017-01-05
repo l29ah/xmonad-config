@@ -1,6 +1,8 @@
---- src/XMonad/Core.hs	2010-09-05 05:11:42.000000000 +0400
-+++ src/XMonad/Core.hs	2010-09-18 07:59:14.000000000 +0400
-@@ -65,6 +65,7 @@
+diff --git a/src/XMonad/Core.hs b/src/XMonad/Core.hs
+index c79b992..29c7f77 100644
+--- a/src/XMonad/Core.hs
++++ b/src/XMonad/Core.hs
+@@ -68,6 +68,7 @@ data XState = XState
      , waitingUnmap     :: !(M.Map Window Int)            -- ^ the number of expected UnmapEvents
      , dragging         :: !(Maybe (Position -> Position -> X (), X ()))
      , numberlockMask   :: !KeyMask                       -- ^ The numlock modifier
@@ -8,17 +10,19 @@
      , extensibleState  :: !(M.Map String (Either String StateExtension))
      -- ^ stores custom state information.
      --
---- src/XMonad/Main.hs	2010-09-05 05:11:42.000000000 +0400
-+++ src/XMonad/Main.hs	2010-09-18 08:03:11.000000000 +0400
-@@ -129,6 +129,7 @@
+diff --git a/src/XMonad/Main.hs b/src/XMonad/Main.hs
+index 3b6ace1..bdcab3a 100644
+--- a/src/XMonad/Main.hs
++++ b/src/XMonad/Main.hs
+@@ -219,6 +219,7 @@ launch initxmc = do
              , mapped          = S.empty
              , waitingUnmap    = M.empty
              , dragging        = Nothing
 +            , keyPressed      = 0
-             , extensibleState = extState
+             , extensibleState = M.empty
              }
-     allocaXEvent $ \e ->
-@@ -190,10 +191,15 @@
+ 
+@@ -291,10 +292,15 @@ handle :: Event -> X ()
  -- run window manager command
  handle (KeyEvent {ev_event_type = t, ev_state = m, ev_keycode = code})
      | t == keyPress = withDisplay $ \dpy -> do
@@ -38,3 +42,15 @@
  
  -- manage a new window
  handle (MapRequestEvent    {ev_window = w}) = withDisplay $ \dpy -> do
+diff --git a/src/XMonad/Operations.hs b/src/XMonad/Operations.hs
+index aa44dcd..747cbf7 100644
+--- a/src/XMonad/Operations.hs
++++ b/src/XMonad/Operations.hs
+@@ -482,6 +482,7 @@ readStateFile xmc = do
+                     , mapped          = S.empty
+                     , waitingUnmap    = M.empty
+                     , dragging        = Nothing
++                    , keyPressed      = 0
+                     , extensibleState = extState
+                     }
+   where
