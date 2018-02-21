@@ -358,7 +358,7 @@ readProcessWithExitCode' cmd args input = do
     return (ex, out, err)
 --}}}
 --{{{ Main config
-main = let conf = ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
+main = let conf = ignoreNetActiveWindow (return True) $ withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
 			spawnUrgencyHook "urge " w)
 			(UrgencyConfig {
@@ -376,9 +376,9 @@ main = let conf = ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC 
 			, mouseBindings      = myMouseBindings
 			, layoutHook         = myLayout
 			, manageHook         = myManageHook
-			, handleEventHook    = perWindowKbdLayout
 			, logHook            = myLogHook
-			, startupHook        = disableAutoRepeat >> setWMName "LG3D"
+			, handleEventHook    = perWindowKbdLayout <+> ewmhDesktopsEventHook	-- full ewmh disabled due to https://github.com/xmonad/xmonad-contrib/issues/227
+			, startupHook        = disableAutoRepeat >> setWMName "LG3D" >> ewmhDesktopsStartup
 		} in
 	xmonad $ conf
 --}}}
