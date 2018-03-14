@@ -96,13 +96,13 @@ invert dpy w status =
              callNoReply client mc
              disconnect client
 --}}}
---{{{ Namer
+--{{{ A CustomNamer to include the window numbers
 
 instance Namer CustomNamer where
     nameIt _ w = do
                     ws <- gets windowset
                     nw <- getName w
-                    let num = maybe "" (\x -> (show $ x + 1) ++ ":") $ elemIndex w (W.integrate' $ W.stack
+                    let num = maybe "" (\x -> (show x) ++ ":") $ elemIndex w (W.integrate' $ W.stack
                                                                           $ W.workspace $ W.current ws)
                     return $ num ++ (show nw)
 
