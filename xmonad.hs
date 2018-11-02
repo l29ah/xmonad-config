@@ -33,6 +33,7 @@ import XMonad.Layout.Grid
 --import XMonad.Layout.GridVariants
 import XMonad.Layout.IM
 import XMonad.Layout.LayoutHints
+import XMonad.Layout.Monitor
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
@@ -206,7 +207,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 	]
 --}}}
 --{{{ Layouts
-myLayout = layoutHintsToCenter $ cn $ smartBorders $
+myLayout = ModifiedLayout xxkb $ layoutHintsToCenter $ cn $ smartBorders $
 	--onWorkspace "web" (full ||| grid) $
 	onWorkspace "web" (full ||| vtab) $
 --	onWorkspace "jabber" (tabBar shrinkText myTheme Bottom $ withIM (10%65) (ClassName "Tkabber") full) $
@@ -238,6 +239,12 @@ myLayout = layoutHintsToCenter $ cn $ smartBorders $
 		tiles = tiled
 --}}}
 --{{{ Window rules
+xxkb = monitor
+	{ prop = ClassName "XXkb"
+	, rect = Rectangle (1920-13) (1080-13) 13 13
+	, persistent = True
+	}
+
 myManageHook = composeOne [ 
 	className =? "Gimp" -?> doFloat,
 	className =? "evilrun" -?> doRectFloat (RationalRect 0 0 1 (1%10)),
@@ -378,7 +385,7 @@ main = let conf = ignoreNetActiveWindow (return True) $ withUrgencyHookC (\w -> 
 			, keys               = myKeys
 			, mouseBindings      = myMouseBindings
 			, layoutHook         = myLayout
-			, manageHook         = myManageHook
+			, manageHook         = myManageHook <+> manageMonitor xxkb
 			, logHook            = myLogHook
 			, handleEventHook    = perWindowKbdLayout <+> ewmhDesktopsEventHook	-- full ewmh disabled due to https://github.com/xmonad/xmonad-contrib/issues/227
 			, startupHook        = disableAutoRepeat >> setWMName "LG3D" >> ewmhDesktopsStartup
