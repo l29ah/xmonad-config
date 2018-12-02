@@ -44,6 +44,7 @@ import XMonad.Layout.SimpleFloat
 --import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
+import XMonad.Prompt.FuzzyMatch
 import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
 import XMonad.StackSet hiding (workspaces, focus)
