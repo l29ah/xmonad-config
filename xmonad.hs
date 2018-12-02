@@ -11,6 +11,7 @@ import Data.Maybe
 import Data.Monoid
 import Data.Ratio ((%))
 import qualified Data.Text as T
+import Numeric
 import System.Exit
 import System.IO
 import System.Posix.POpen
@@ -50,6 +51,7 @@ import qualified XMonad.StackSet as W
 import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.NamedWindows
+import XMonad.Util.Run
 import XMonad.Util.Scratchpad
 
 -- Local libraries
@@ -144,6 +146,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm,			xK_n),		refresh)
 	, ((modm,			xK_m),		windows focusMaster)
 	, ((modm,			xK_Return),	windows swapMaster)
+	, ((modm .|. controlMask,	xK_Return),	mkTerm)
 	, ((modm .|. controlMask,	xK_h),		sendMessage Shrink)
 	, ((modm .|. controlMask,	xK_l),		sendMessage Expand)
 	, ((modm,			xK_t),		withFocused $ windows . sink)
@@ -186,6 +189,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 		, (f, m) <- [(greedyView, 0), (shift, shiftMask)]] ++
 	[((modm .|. mod1Mask,		k),		tabJump i) | (i, k) <- zip [0..9] [xK_0 .. xK_9]]
 --}}}
+--}}}
+--{{{ mkTerm
+mkTerm = withWindowSet launchTerminal
+
+launchTerminal ws = case peek ws of
+	Nothing -> runInTerm "" "exec $SHELL"
+	Just xid -> terminalInCwd xid
+
+terminalInCwd xid = let
+		hex = showHex xid " "
+		shInCwd = "'cd $(readlink /proc/$(ps --ppid $(xprop -id 0x" ++ hex ++ "_NET_WM_PID | cut -d\" \" -f3) -o pid= | tr -d \" \")/cwd) && $SHELL'"
+	in runInTerm "" $ "sh -c " ++ shInCwd
 --}}}
 --{{{ Tab jumper
 curstack :: W.StackSet i l a sid sd -> W.Stack a
