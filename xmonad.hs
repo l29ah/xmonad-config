@@ -404,6 +404,7 @@ main = let conf = ignoreNetActiveWindow (return True) $ withUrgencyHookC (\w -> 
 			, logHook            = myLogHook
 			, handleEventHook    = perWindowKbdLayout <+> ewmhDesktopsEventHook	-- full ewmh disabled due to https://github.com/xmonad/xmonad-contrib/issues/227
 			, startupHook        = disableAutoRepeat >> setWMName "LG3D" >> ewmhDesktopsStartup
+			, terminal           = "terminal"
 		} in
 	xmonad $ conf
 --}}}
