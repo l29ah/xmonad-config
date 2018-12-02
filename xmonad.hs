@@ -344,7 +344,8 @@ fuckFirefox ye = do
 		-- grsec :/
 		(rc, out, _) <- readProcessWithExitCode' "sudo" ["pgrep", "firefox"] []
 		(rc, out2, _) <- readProcessWithExitCode' "sudo" ["pgrep", "qutebrowser"] []
-		mapM_ fuckIt ((lines $ out) ++ (lines $ out2))
+		(rc, out3, _) <- readProcessWithExitCode' "sudo" ["pgrep", "palemoon"] []
+		mapM_ fuckIt ((lines $ out) ++ (lines $ out2) ++ (lines $ out3))
 	return ()
 	where fuckIt s = signalProcess (if ye then sigSTOP else sigCONT) (CPid $ read s)
 
