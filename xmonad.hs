@@ -27,7 +27,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
-import qualified XMonad.Layout.Decoration
+import XMonad.Layout.Decoration
 import qualified XMonad.Layout.DecorationMadness
 import qualified XMonad.Layout.DwmStyle as DWM
 import XMonad.Layout.Grid
@@ -40,6 +40,7 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
 import XMonad.Layout.ResizeScreen
 import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Stoppable
 --import XMonad.Layout.TabBarDecoration
 --import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
@@ -223,6 +224,9 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 	]
 --}}}
 --{{{ Layouts
+stoppy :: l a -> ModifiedLayout Stoppable l a
+stoppy = ModifiedLayout (Stoppable "Stoppable" 0 Nothing)
+
 myLayout = ModifiedLayout xxkb $ layoutHintsToCenter $ cn $ smartBorders $
 	--onWorkspace "web" (full ||| grid) $
 	onWorkspace "web" (full ||| vtab) $
@@ -282,6 +286,7 @@ myManageHook = composeOne [
 	className =? "dwb" -?> moveTo "web",
 	className =? "Dwb" -?> moveTo "web",
 	className =? "qutebrowser" -?> moveTo "web",
+	resource =? "Navigator" -?> moveTo "web",
 	className =? "Skype" -?> moveTo "stuff",
 	className =? "Googleearth-bin" -?> moveTo "stuff",
 	className =? "Marble Virtual Globe" -?> moveTo "stuff",
@@ -299,6 +304,7 @@ myManageHook = composeOne [
 	className =? "transmission" -?> moveTo "stuff",
 	className =? "Blink" -?> moveTo "stuff",
 	className =? "Linphone" -?> moveTo "stuff",
+	title =? "mutt" -?> moveTo "stuff",
 	className =? "Apvlv" -?> moveTo "reading",
 	className =? "XDvi" -?> moveTo "reading",
 	className =? "Epdfview" -?> moveTo "reading",
@@ -312,6 +318,7 @@ myManageHook = composeOne [
 	title =? "atop" -?> moveTo "status",
 	title =? "pinger" -?> moveTo "status",
 	title =? "syslog" -?> moveTo "status",
+	className =? "freeorion" -?> moveTo "backspace",
 
 	return True -?> namedScratchpadManageHook scratchpads >> doSink
 	]

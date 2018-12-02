@@ -1,7 +1,10 @@
 *~
 *.hi
 *.o
+/xmonad
 /xmonad.errors
 /xmonad-*-linux
 PerWindowKbdLayout.hs
 DisableAutoRepeat.hs
+prompt-history
+*.sw?
