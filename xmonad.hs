@@ -201,7 +201,7 @@ launchTerminal ws = case peek ws of
 
 terminalInCwd xid = let
 		hex = showHex xid " "
-		shInCwd = "'cd $(readlink /proc/$(ps --ppid $(xprop -id 0x" ++ hex ++ "_NET_WM_PID | cut -d\" \" -f3) -o pid= | tr -d \" \")/cwd) && $SHELL'"
+		shInCwd = "'cd $(readlink /proc/$(ps --ppid $(xprop -id 0x" ++ hex ++ "_NET_WM_PID | cut -d\" \" -f3) -o pid= | tr -d \" \")/cwd) && exec $SHELL'"
 	in runInTerm "" $ "sh -c " ++ shInCwd
 --}}}
 --{{{ Tab jumper
