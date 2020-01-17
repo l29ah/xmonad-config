@@ -330,7 +330,7 @@ myManageHook = composeOne [
 data FuckStatus = FuckStatus (Bool, Bool) deriving (Typeable,Read,Show)
 
 instance ExtensionClass FuckStatus where
-	initialValue = FuckStatus (True, False)
+	initialValue = FuckStatus (False, False)
 	extensionType = PersistentExtension
 
 myLogHook = do
