@@ -302,6 +302,7 @@ myManageHook = composeOne [
 	className =? "Transmission-gtk" -?> moveTo "stuff",
 	className =? "Transmission-qt" -?> moveTo "stuff",
 	className =? "transmission" -?> moveTo "stuff",
+	className =? "qBittorrent" -?> moveTo "stuff",
 	className =? "Blink" -?> moveTo "stuff",
 	className =? "Linphone" -?> moveTo "stuff",
 	title =? "mutt" -?> moveTo "stuff",
