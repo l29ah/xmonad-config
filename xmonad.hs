@@ -129,12 +129,13 @@ myTheme = defaultTheme {
 	decoWidth = 1600,
 	decoHeight = 18
 }
-myXPConfig = defaultXPConfig {
-	font = fontName myTheme,
-	bgColor = activeColor myTheme,
-	fgColor = activeTextColor myTheme,
-	borderColor = activeBorderColor myTheme
-}
+myXPConfig = defaultXPConfig
+	{ font = fontName myTheme
+	, bgColor = activeColor myTheme
+	, fgColor = activeTextColor myTheme
+	, borderColor = activeBorderColor myTheme
+	, promptKeymap = vimLikeXPKeymap
+	}
 --}}}
 --{{{ Scratchpads
 scratchpads = [
