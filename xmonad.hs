@@ -30,6 +30,7 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Decoration
 import qualified XMonad.Layout.DecorationMadness
 import qualified XMonad.Layout.DwmStyle as DWM
+import XMonad.Layout.Fullscreen
 import XMonad.Layout.Grid
 --import XMonad.Layout.GridVariants
 import XMonad.Layout.IM
@@ -253,7 +254,7 @@ myLayout = ModifiedLayout xxkb $ layoutHintsToCenter $ cn $ smartBorders $
 		htab = noBorders $ reflectHoriz $ mtabbed 5 myName MT.shrinkText myTheme
 		vtab = noBorders $ reflectHoriz $ vtabbed 200 myName VT.shrinkText myTheme
 		--tabbed = noBorders $ reflectHoriz $ tabBar shrinkText myTheme Bottom Full
-		full = noBorders Full
+		full = fullscreenFull $ noBorders Full
 		im = withIM (10%65) (ClassName "Tkabber" `Or` (Resource "main" `And` ClassName "psi") `Or` Role "roster")
 		--tiles = (dwmify $ tiled) ||| (dwmify $ Mirror tiled)
 		--tiles = dwmify $ tiled
@@ -394,7 +395,7 @@ readProcessWithExitCode' cmd args input = do
     return (ex, out, err)
 --}}}
 --{{{ Main config
-main = let conf = ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
+main = let conf = fullscreenSupport $ ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
 			spawnUrgencyHook "urge " w)
 			(UrgencyConfig {
