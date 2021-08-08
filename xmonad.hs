@@ -322,6 +322,7 @@ myManageHook = composeOne [
 	title =? "pinger" -?> moveTo "status",
 	title =? "syslog" -?> moveTo "status",
 	className =? "freeorion" -?> moveTo "backspace",
+	className =? "explorer.exe" -?> moveTo "backspace",
 
 	return True -?> namedScratchpadManageHook scratchpads >> doSink
 	]
