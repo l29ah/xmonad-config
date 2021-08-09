@@ -115,7 +115,7 @@ instance Namer CustomNamer where
 myName = CustomNamer
 --}}}
 --{{{ Theme
-myTheme = defaultTheme {
+myTheme = def {
 	fontName = "xft:Terminus:size=10",
 	--fontName = "-*-terminus-medium-*-*-*-14-*-*-*-*-*-iso10646-*",
 	activeColor = "#000000",
@@ -130,7 +130,7 @@ myTheme = defaultTheme {
 	decoWidth = 1600,
 	decoHeight = 18
 }
-myXPConfig = defaultXPConfig
+myXPConfig = def
 	{ font = fontName myTheme
 	, bgColor = activeColor myTheme
 	, fgColor = activeTextColor myTheme

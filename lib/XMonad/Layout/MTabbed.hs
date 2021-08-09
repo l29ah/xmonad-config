@@ -18,7 +18,6 @@
 module XMonad.Layout.MTabbed
     ( simpleMTabbed, mtabbed, addMTabs
     , Theme (..)
-    , defaultTheme
     , MTabbedDecoration (..)
     , shrinkText, CustomShrink(CustomShrink)
     , Shrinker(..)
@@ -42,7 +41,7 @@ import XMonad.Layout.Simplest ( Simplest(Simplest) )
 
 -- | A mtabbed layout with the default xmonad Theme.
 simpleMTabbed :: Int32 -> ModifiedLayout (Decoration MTabbedDecoration DefaultNamer DefaultShrinker) Simplest Window
-simpleMTabbed count = mtabbed count nameDeco shrinkText defaultTheme
+simpleMTabbed count = mtabbed count nameDeco shrinkText def
 
 -- | A layout decorated with tabs and the possibility to set a custom
 -- shrinker and theme.

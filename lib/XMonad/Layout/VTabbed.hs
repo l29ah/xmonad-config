@@ -18,7 +18,6 @@
 module XMonad.Layout.VTabbed
     ( simpleVTabbed, vtabbed, addVTabs
     , Theme (..)
-    , defaultTheme
     , VTabbedDecoration (..)
     , shrinkText, CustomShrink(CustomShrink)
     , Shrinker(..)
@@ -39,7 +38,7 @@ import XMonad.Layout.Simplest ( Simplest(Simplest) )
 
 -- | A vtabbed layout with the default xmonad Theme.
 simpleVTabbed :: Int32 -> ModifiedLayout (Decoration VTabbedDecoration DefaultNamer DefaultShrinker) Simplest Window
-simpleVTabbed size = vtabbed size nameDeco shrinkText defaultTheme
+simpleVTabbed size = vtabbed size nameDeco shrinkText def
 
 -- | A layout decorated with tabs and the possibility to set a custom
 -- shrinker and theme.

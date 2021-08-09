@@ -18,7 +18,7 @@ module XMonad.Layout.DecorationNG
     ( -- * Usage:
       -- $usage
       decoration
-    , Theme (..), defaultTheme
+    , Theme (..)
     , Decoration
     , DecorationMsg (..)
     , DecorationStyle (..)
@@ -42,7 +42,7 @@ import Foreign.C.Types(CInt)
 import XMonad
 import qualified XMonad.StackSet as W
 import XMonad.Hooks.UrgencyHook
-import XMonad.Layout.Decoration (Theme (..), defaultTheme, Shrinker (..), DefaultShrinker
+import XMonad.Layout.Decoration (Theme (..), Shrinker (..), DefaultShrinker
                                 , shrinkText, CustomShrink ( CustomShrink ), shrinkWhile)
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.WindowArranger (WindowArrangerMsg (..), diff, listFromList)
