@@ -6,7 +6,7 @@ import Control.Concurrent.MVar
 import qualified Control.Exception as C
 import Control.Monad
 import Data.List
-import qualified Data.Map        as M
+import qualified Data.Map as M
 import Data.Maybe
 import Data.Monoid
 import Data.Ratio ((%))
@@ -158,7 +158,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm,			xK_period),	sendMessage (IncMasterN (-1)))
 	, ((modm .|. shiftMask,		xK_q),		io (exitWith ExitSuccess))
 	, ((modm,			xK_u),		focusUrgent)
-	, ((modm,			xK_i     ),	withDisplay $ \dpy -> withFocused $ \w -> inversionStatus dpy w >>= \status -> invert dpy w $ not status)
+	, ((modm,			xK_i),		withDisplay $ \dpy -> withFocused $ \w -> inversionStatus dpy w >>= \status -> invert dpy w $ not status)
 	, ((modm,			xK_g),		windowPromptGoto myXPConfig
 								{ searchPredicate = fuzzyMatch
 								, sorter = fuzzySort
