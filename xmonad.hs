@@ -403,7 +403,7 @@ main = let conf = fullscreenSupport $ ignoreNetActiveWindow (return True) $ ewmh
 				suppressWhen = Focused,
 				remindWhen = Every 60
 			}) $
-		defaultConfig
+		def
 			{ focusFollowsMouse  = False
 			, borderWidth        = 1
 			, modMask            = mod4Mask
