@@ -359,7 +359,7 @@ readProcessWithExitCode' cmd args input = do
     return (ex, out, err)
 --}}}
 --{{{ Main config
-main = let conf = fullscreenSupport $ ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
+main = let conf = ignoreNetActiveWindow (return True) $ ewmh $ withUrgencyHookC (\w -> do
 			borderUrgencyHook "#ffff00" w
 			spawnUrgencyHook "urge " w)
 			(UrgencyConfig {
