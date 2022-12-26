@@ -330,7 +330,7 @@ readProcessWithExitCode'
     -> IO (ExitCode,String,String) -- ^ exitcode, stdout, stderr
 readProcessWithExitCode' cmd args input = do
     (Just inh, Just outh, Just errh, pid) <-
-        createProcess (proc cmd args){ std_in  = CreatePipe,
+        createProcess (System.Process.proc cmd args){ std_in  = CreatePipe,
                                        std_out = CreatePipe,
                                        std_err = CreatePipe }
 
