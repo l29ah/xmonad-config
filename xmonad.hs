@@ -102,8 +102,10 @@ myXPConfig = def
 	}
 --}}}
 --{{{ Scratchpads
-scratchpads = [
-	NS "vimscratch" "urxvt -name vimscratch -e vim ~/vdoc/scratchpad" (resource =? "vimscratch") nonFloating]
+scratchpads =
+	[ NS "vimscratch" "urxvt -name vimscratch -e vim ~/vdoc/scratchpad" (resource =? "vimscratch") nonFloating
+	, NS "ghci" "urxvt -name ghci -e ghci" (resource =? "ghci") nonFloating
+	]
 --}}}
 --{{{ Key bindings
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
@@ -141,7 +143,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 	, ((modm .|. shiftMask,		xK_j),		do; wsname <- gets (currentTag . windowset); if wsname == "jabber" then windows swapDown else sendMessage $ Swap D)
 	, ((modm,			xK_p),		shellPrompt myXPConfig)
 	, ((modm .|. shiftMask,		xK_f),		XS.modify (\(FuckStatus (x, y)) -> FuckStatus (not x, y)))
-	, ((modm,			xK_a),		scratchpadSpawnActionCustom "urxvt -name scratchpad -e ghci")
+	, ((modm,			xK_a),		namedScratchpadAction scratchpads "ghci")
 	, ((modm .|. shiftMask,		xK_s),		namedScratchpadAction scratchpads "vimscratch")
 	--, ((modm, xK_g), goToSelected defaultGSConfig)
 	] ++
