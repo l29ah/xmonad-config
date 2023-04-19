@@ -43,7 +43,7 @@ import XMonad.Layout.ResizeScreen
 import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Stoppable
 --import XMonad.Layout.TabBarDecoration
---import XMonad.Layout.Tabbed
+import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
@@ -63,7 +63,6 @@ import XMonad.Hooks.DisableAutoRepeat
 import XMonad.Hooks.IgnoreNetActiveWindow
 import XMonad.Hooks.PerWindowKbdLayout
 import XMonad.Layout.MTabbed as MT
-import XMonad.Layout.VTabbed as VT
 --}}}
 --{{{ A CustomNamer to include the window numbers
 
@@ -196,10 +195,10 @@ stoppy = ModifiedLayout (Stoppable "Stoppable" 0 Nothing)
 
 myLayout = ModifiedLayout xxkb $ layoutHintsToCenter $ cn $ smartBorders $
 	--onWorkspace "web" (full ||| grid) $
-	onWorkspace "web" (full ||| vtab) $
+	onWorkspace "web" (full ||| htab) $
 --	onWorkspace "jabber" (tabBar shrinkText myTheme Bottom $ withIM (10%65) (ClassName "Tkabber") full) $
 	--onWorkspace "jabber" ((im full) ||| grid) $
-	onWorkspace "jabber" (im htab ||| full) $
+	onWorkspace "jabber" (im hmtab ||| full) $
 	onWorkspace "stuff" (grid ||| full) $
 	onWorkspace "status" (Mirror $ withIM (2%100) (Title "dzencontent") (Tall 1 (1/100) (70/100)) ||| full) $
 	onWorkspace "backspace" full $
@@ -215,10 +214,8 @@ myLayout = ModifiedLayout xxkb $ layoutHintsToCenter $ cn $ smartBorders $
 		--tiled = tallSimpleTabbed
 		grid = nodumbborders $ dwmify $ GridRatio (4/3)
 		tiled = nodumbborders $ Tall 2 (3/100) (54/100)	-- 80 columns on the both sides at 1400px
-		--htab = noBorders $ reflectHoriz $ tabbedBottomAlways shrinkText myTheme
-		htab = noBorders $ reflectHoriz $ mtabbed 5 myName MT.shrinkText myTheme
-		vtab = noBorders $ reflectHoriz $ vtabbed 200 myName VT.shrinkText myTheme
-		--tabbed = noBorders $ reflectHoriz $ tabBar shrinkText myTheme Bottom Full
+		htab = noBorders $ reflectHoriz $ tabbedAlways shrinkText myTheme
+		hmtab = noBorders $ reflectHoriz $ mtabbed 5 myName MT.shrinkText myTheme
 		full = fullscreenFull $ noBorders Full
 		im = withIM (10%65) (ClassName "Tkabber" `Or` (Resource "main" `And` ClassName "psi") `Or` Role "roster")
 		--tiles = (dwmify $ tiled) ||| (dwmify $ Mirror tiled)
