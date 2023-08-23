@@ -55,7 +55,6 @@ import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.NamedWindows
 import XMonad.Util.Run
-import XMonad.Util.Scratchpad
 
 -- Local libraries
 import XMonad.Actions.Invert

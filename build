@@ -1,0 +1,2 @@
+#!/bin/sh
+ghc -fno-warn-tabs --make xmonad.hs -i -ilib -fforce-recomp -main-is main -v0 -outputdir ~/.xmonad/build-x86_64-linux -o ~/.xmonad/xmonad-x86_64-linux

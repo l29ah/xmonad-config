@@ -64,6 +64,7 @@ data XkbStateRec = XkbStateRec {
 instance Storable XkbStateRec where
     sizeOf _ = (#size XkbStateRec)
     alignment _ = alignment (undefined :: CUShort)
+    poke = undefined
     peek ptr = do
         r_group <- (#peek XkbStateRec, group) ptr
         r_locked_group <- (#peek XkbStateRec, locked_group) ptr
